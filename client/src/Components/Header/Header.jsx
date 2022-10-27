@@ -8,6 +8,14 @@ import 'react-date-range/dist/theme/default.css';
 import {format} from "date-fns";
 import {useLocation, useNavigate} from "react-router-dom";
 
+const property = [
+    {title: 'stays', icon: faBed},
+    {title: 'Flights', icon: faPlane},
+    {title: 'Car rentals', icon: faCar},
+    {title: 'Attraction', icon: faBed},
+    {title: 'Airport Taxi', icon: faTaxi},
+]
+
 export function Header() {
     const {pathname} = useLocation()
     const currentPage = pathname.split('/').slice(1)[0]
@@ -23,6 +31,7 @@ export function Header() {
     ]);
     const [openDate, setOpenDate] = useState(false);
     const [openOptions, setOpenOptions] = useState(false);
+    const [currentProperty, setCurrentProperty] = useState(0);
     const [options, setOptions] = useState({
         adult: 1,
         children: 0,
@@ -47,30 +56,15 @@ export function Header() {
             <div className={cl.header__container}>
 
                 <div className={cl.header__list}>
-                    <div className={`${cl.header__list__item} ${cl.active}`}>
-                        <FontAwesomeIcon icon={faBed}/>
-                        <span>Stays</span>
-                    </div>
 
-                    <div className={cl.header__list__item}>
-                        <FontAwesomeIcon icon={faPlane}/>
-                        <span>Flights</span>
-                    </div>
+                    {property.map((item, idx) => (
+                        <div key={item.title} onClick={() => setCurrentProperty(idx)}
+                             className={idx !== currentProperty ? `${cl.header__list__item}` : `${cl.header__list__item} ${cl.active}`}>
+                            <FontAwesomeIcon icon={item.icon}/>
+                            <span>{item.title}</span>
+                        </div>
+                    ))}
 
-                    <div className={cl.header__list__item}>
-                        <FontAwesomeIcon icon={faCar}/>
-                        <span>Car rentals</span>
-                    </div>
-
-                    <div className={cl.header__list__item}>
-                        <FontAwesomeIcon icon={faBed}/>
-                        <span>Attractions</span>
-                    </div>
-
-                    <div className={cl.header__list__item}>
-                        <FontAwesomeIcon icon={faTaxi}/>
-                        <span>Airport Taxis</span>
-                    </div>
                 </div>
 
                 {isHotelPage &&
