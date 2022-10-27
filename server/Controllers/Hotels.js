@@ -26,11 +26,22 @@ export const updateHotel = async (req, res) => {
 }
 export const deleteHotel = async (req, res) => {
     try {
-        const newHotel = new Hotel(req.body)
+        const hotel = await HotelModel.findByIdAndDelete(req.params.id)
 
-        await newHotel.save()
 
-        res.status(200).json({...newHotel._doc})
+        res.status(200).json(hotel)
+    } catch (e) {
+        console.log(e)
+        res.status(500).json(e)
+    }
+}
+
+export const getHotel = async (req, res) => {
+    try {
+        const hotel = await HotelModel.findById(req.params.id)
+
+
+        res.status(200).json(hotel)
     } catch (e) {
         console.log(e)
         res.status(500).json(e)
