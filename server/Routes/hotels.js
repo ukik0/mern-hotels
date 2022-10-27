@@ -1,22 +1,27 @@
 import {Router} from "express";
-import {createHotel, deleteHotel, getHotel, updateHotel} from "../Controllers/Hotels.js";
+import {createHotel, deleteHotel, getAllHotels, getHotel, updateHotel} from "../Controllers/Hotels.js";
+import {verifyAdmin} from "../utils/verifyToken.js";
 
 const router = Router()
 
 //CREATE
 //http://localhost:8001/api/hotels/
-router.post('/', createHotel)
+router.post('/', verifyAdmin, createHotel)
 
 //UPDATE
 //http://localhost:8001/api/hotels/id
-router.patch('/:id', updateHotel)
+router.patch('/:id', verifyAdmin, updateHotel)
 
 //UPDATE
 //http://localhost:8001/api/hotels/id
-router.delete('/:id', deleteHotel)
+router.delete('/:id', verifyAdmin, deleteHotel)
 
-//Get Hotel
+//Get One Hotel
 //http://localhost:8001/api/hotels/id
 router.get('/:id', getHotel)
+
+//Get All Hotels
+//http://localhost:8001/api/hotels/
+router.get('/', getAllHotels)
 
 export default router

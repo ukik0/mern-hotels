@@ -13,6 +13,6 @@ const HotelSchema = new mongoose.Schema({
     featured: {type: Boolean, default: false},
     photos: [String],
     rooms: [String]
-})
+}, {timestamps: true})
 
 export default mongoose.model('Hotel', HotelSchema)
