@@ -6,6 +6,7 @@ import {useState} from "react";
 import {format} from "date-fns";
 import {DateRange} from 'react-date-range';
 import {SearchItem} from "../../Components/SearchItem/SearchItem";
+import useFetch from "../../Hooks/useFetching";
 
 
 export function HotelPage() {
@@ -15,6 +16,14 @@ export function HotelPage() {
     const [options, setOptions] = useState(location.state.options);
     const [date, setDate] = useState(location.state.date);
     const [openDate, setOpenDate] = useState(false);
+    const [MinMax, setMinMax] = useState({min: 0, max: 9999});
+
+    const {data, loading, reFetch} = useFetch(`/hotels/?city=${destionation}&min=${MinMax.min}&max=${MinMax.max}`)
+
+
+    function handleClick() {
+        reFetch()
+    }
 
     return (<>
             <Navbar/>
@@ -28,7 +37,7 @@ export function HotelPage() {
 
                         <div className={cl.list__search__item}>
                             <label>Destination</label>
-                            <input placeholder={destionation} type="text"/>
+                            <input  placeholder={destionation} type="text"/>
                         </div>
 
                         <div className={cl.list__search__item}>
@@ -45,13 +54,13 @@ export function HotelPage() {
                             <div className={cl.list__search__item__options}>
                                 <span>Min price <small>per night</small></span>
 
-                                <input type="number"/>
+                                <input onChange={(e) => setMinMax({...MinMax, min: e.target.value})} type="number"/>
                             </div>
 
                             <div className={cl.list__search__item__options}>
                                 <span>Max price <small>per night</small></span>
 
-                                <input type="number"/>
+                                <input onChange={(e) => setMinMax({...MinMax, max: e.target.value})} type="number"/>
                             </div>
 
                             <div className={cl.list__search__item__options}>
@@ -73,18 +82,11 @@ export function HotelPage() {
                             </div>
                         </div>
 
-                        <button>Search</button>
+                        <button onClick={handleClick}>Search</button>
 
                     </div>
                     <div className={cl.list__result}>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
-                        <SearchItem/>
+                        {loading ? <h1>Loading</h1> : data.map((item, idx) => (<SearchItem key={item._id} item={item}/>))}
                     </div>
                 </div>
             </div>

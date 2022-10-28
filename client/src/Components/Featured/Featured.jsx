@@ -2,7 +2,7 @@ import cl from './Featured.module.scss'
 import useFetch from "../../Hooks/useFetching";
 
 export function Featured() {
-    const {data, loading, error, reFetch} = useFetch('/hotels/countByCity?cities=london,berlin,madrid')
+    const {data, loading, error} = useFetch('/hotels/countByCity?cities=london,berlin,madrid')
 
     return (
         <div className={cl.featured}>
