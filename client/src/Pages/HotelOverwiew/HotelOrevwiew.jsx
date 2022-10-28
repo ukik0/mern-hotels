@@ -8,10 +8,13 @@ import {EmailList} from "../../Components/EmailList/EmailList";
 import {useState} from "react";
 import {useParams} from "react-router-dom";
 import useFetch from "../../Hooks/useFetching";
+import {useSelector} from "react-redux";
 
 
 export function HotelOrevwiew() {
     const {id} = useParams()
+    const dates = useSelector((state) => state?.info?.search?.date[0])
+    const {options} = useSelector((state) => state.info.search)
 
     const [slideNumber, setSlideNumber] = useState(0);
     const [open, setOpen] = useState(false);
@@ -34,6 +37,14 @@ export function HotelOrevwiew() {
 
         setSlideNumber(newSlider)
     }
+
+    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+    function dayDifference(date1, date2) {
+        const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+        return diffDays;
+    }
+
 
     return (<>
         <Navbar/>
@@ -91,13 +102,13 @@ export function HotelOrevwiew() {
                             </div>
 
                             <div className={cl.hotel__details__price}>
-                                <h1>Perfect for a 9-night stay!</h1>
+                                <h1>Perfect for a {dayDifference(dates.endDate, dates.startDate)}-night stay!</h1>
                                 <span>
                                 Located in the real heart of Krakow, this property has an
                                 excellent location score of 9.8!
                             </span>
                                 <h2>
-                                    <b>$945</b> (9 nights)
+                                    <b>{dayDifference(dates.endDate, dates.startDate) * data.cheapestPrice * options.room}$</b> ({dayDifference(dates.endDate, dates.startDate)} nights)
                                 </h2>
                                 <button>Reserve or Book Now!</button>
                             </div>

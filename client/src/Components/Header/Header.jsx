@@ -7,6 +7,8 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import {format} from "date-fns";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {searchReducer} from "../../Redux/Slices/infoSlice";
 
 const property = [
     {title: 'stays', icon: faBed},
@@ -17,9 +19,10 @@ const property = [
 ]
 
 export function Header() {
+    const dispatch = useDispatch()
+    const {user} = useSelector((state) => state.auth)
     const {pathname} = useLocation()
     const currentPage = pathname.split('/').slice(1)[0]
-    const isHotelPage = !!(currentPage !== 'hotels' & currentPage !== 'hotel')
     const navigate = useNavigate()
 
     const [date, setDate] = useState([
@@ -38,6 +41,8 @@ export function Header() {
         room: 1
     });
     const [destination, setDestination] = useState("");
+    const isHotelPage = !!(currentPage !== 'hotels' & currentPage !== 'hotel')
+
 
     function handleOptions(name, operation) {
         setOptions(prevState => {
@@ -48,6 +53,7 @@ export function Header() {
     }
 
     function onClickSearch() {
+        dispatch(searchReducer({destination, date, options}))
         navigate(`/hotels`, {state: {destination, date, options}})
     }
 
@@ -77,9 +83,9 @@ export function Header() {
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, impedit.
                         </p>
 
-                        <button className={cl.header__button}>
+                        {!user && <button className={cl.header__button}>
                             Sign in / Register
-                        </button>
+                        </button>}
 
                         <div className={cl.header__search}>
                             <div className={cl.header__search__item}>
