@@ -35,6 +35,10 @@ const AuthSlice = createSlice({
 })
 
 export const checkIsAuth = (state) => state?.auth?.user
+export const checkUser = (state) => state?.auth
+export const checkDates = (state) => state?.info.search.date[0]
+export const checkOptions = (state) => state?.info?.search?.options
+
 export const {logout} = AuthSlice.actions
 
 export const AuthReducer = AuthSlice.reducer;

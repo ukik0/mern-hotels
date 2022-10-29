@@ -1,47 +1,32 @@
 import cl from './Header.module.scss'
+import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi} from "@fortawesome/free-solid-svg-icons";
 import {DateRange} from 'react-date-range';
-import {useState} from "react";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import {format} from "date-fns";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {searchReducer} from "../../Redux/Slices/infoSlice";
-
-const property = [
-    {title: 'stays', icon: faBed},
-    {title: 'Flights', icon: faPlane},
-    {title: 'Car rentals', icon: faCar},
-    {title: 'Attraction', icon: faBed},
-    {title: 'Airport Taxi', icon: faTaxi},
-]
+import property from '../../Assets/data'
+import {checkUser} from "../../Redux/Slices/authSlice";
 
 export function Header() {
     const dispatch = useDispatch()
-    const {user} = useSelector((state) => state.auth)
+    const {user} = useSelector(checkUser)
     const {pathname} = useLocation()
-    const currentPage = pathname.split('/').slice(1)[0]
     const navigate = useNavigate()
 
-    const [date, setDate] = useState([
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection'
-        }
-    ]);
+    const [date, setDate] = useState([{startDate: new Date(), endDate: new Date(), key: 'selection'}]);
     const [openDate, setOpenDate] = useState(false);
     const [openOptions, setOpenOptions] = useState(false);
     const [currentProperty, setCurrentProperty] = useState(0);
-    const [options, setOptions] = useState({
-        adult: 1,
-        children: 0,
-        room: 1
-    });
+    const [options, setOptions] = useState({adult: 1, children: 0, room: 1});
     const [destination, setDestination] = useState("");
+    const currentPage = pathname.split('/').slice(1)[0]
     const isHotelPage = !!(currentPage !== 'hotels' & currentPage !== 'hotel')
+
 
 
     function handleOptions(name, operation) {

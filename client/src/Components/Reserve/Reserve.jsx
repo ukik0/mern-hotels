@@ -6,36 +6,21 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import axios from "../../utils/axios";
 import {useNavigate} from "react-router-dom";
+import {checkDates} from "../../Redux/Slices/authSlice";
+import {getDatesInRange} from "../../utils/getDatesInRange";
 
 export function Reserve({setOpen, hotelId}) {
-    const dates = useSelector((state) => state?.info.search.date[0])
+    const dates = useSelector(checkDates)
     const navigate = useNavigate()
 
     const [selectedRooms, setSelectedRooms] = useState([]);
 
-    const {data, loading} = useFetch(`/hotels/room/${hotelId}`)
+    const {data} = useFetch(`/hotels/room/${hotelId}`)
 
     function onInputChange(e) {
         const checked = e.target.checked
-
         setSelectedRooms(checked ? [...selectedRooms, e.target.value] : selectedRooms.filter((room) => room !== e.target.value))
     }
-
-    const getDatesInRange = (startDate, endDate) => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        const date = new Date(start.getTime());
-
-        const dates = [];
-
-        while (date <= end) {
-            dates.push(new Date(date).getTime());
-            date.setDate(date.getDate() + 1);
-        }
-
-        return dates;
-    };
 
     const alldates = getDatesInRange(dates.startDate, dates.endDate);
 
@@ -55,8 +40,6 @@ export function Reserve({setOpen, hotelId}) {
         }))
 
        setOpen(false)
-       navigate('/')
-
     }
 
     return (
@@ -85,9 +68,10 @@ export function Reserve({setOpen, hotelId}) {
                                     <label>{roomNumber.number}</label>
                                     <input
                                         type="checkbox"
-                                        disabled={!isAvailable(roomNumber)}
                                         value={roomNumber._id}
-                                        onChange={onInputChange}/>
+                                        onChange={onInputChange}
+                                        disabled={!isAvailable(roomNumber)}
+                                    />
                                 </div>
                             ))}
                         </div>

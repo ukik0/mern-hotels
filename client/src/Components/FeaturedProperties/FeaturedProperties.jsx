@@ -2,7 +2,7 @@ import cl from './FeaturedProperties.module.scss'
 import useFetch from "../../Hooks/useFetching";
 
 export function FeaturedProperties() {
-    const {data, loading, error} = useFetch('/hotels/?featured=true&limit=4')
+    const {data, loading} = useFetch('/hotels/?featured=true&limit=4')
 
     return (
         <div className={cl.property}>

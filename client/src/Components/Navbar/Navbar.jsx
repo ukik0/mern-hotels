@@ -1,12 +1,12 @@
 import cl from './Navbar.module.scss'
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "../../Redux/Slices/authSlice";
+import {checkUser, logout} from "../../Redux/Slices/authSlice";
 
 export function Navbar() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const {user} = useSelector((state) => state.auth)
+    const {user} = useSelector(checkUser)
 
     function logoutClick() {
         dispatch(logout())
