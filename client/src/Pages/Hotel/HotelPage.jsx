@@ -12,7 +12,7 @@ import useFetch from "../../Hooks/useFetching";
 export function HotelPage() {
     const location = useLocation()
 
-    const [destionation, setDestionation] = useState(location.state.destination);
+    const [destination, setDestination] = useState(location.state.destination);
     const [options, setOptions] = useState(location.state.options);
     const [date, setDate] = useState(location.state.date);
     const [openDate, setOpenDate] = useState(false);
@@ -22,7 +22,7 @@ export function HotelPage() {
         data,
         loading,
         reFetch
-    } = useFetch(`/hotels/${destionation ? `?city=${destionation}&min=${MinMax.min}&max=${MinMax.max}` : ''}`)
+    } = useFetch(`/hotels/${destination ? `?city=${destination}&min=${MinMax.min}&max=${MinMax.max}` : ''}`)
 
 
     function handleClick() {
@@ -43,7 +43,7 @@ export function HotelPage() {
 
                         <div className={cl.list__search__item}>
                             <label>Destination</label>
-                            <input value={destionation} onChange={(e) => setDestionation(e.target.value)} type="text"/>
+                            <input value={destination} onChange={(e) => setDestination(e.target.value)} type="text"/>
                         </div>
 
                         <div className={cl.list__search__item}>
