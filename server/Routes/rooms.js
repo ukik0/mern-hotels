@@ -1,5 +1,12 @@
 import {Router} from "express";
-import {createRoom, deleteRoom, getAllRooms, getRoom, updateRoom} from "../Controllers/Rooms.js";
+import {
+    createRoom,
+    deleteRoom,
+    getAllRooms,
+    getRoom,
+    updateRoom,
+    updateRoomAvailability
+} from "../Controllers/Rooms.js";
 import {verifyAdmin} from "../utils/verifyToken.js";
 
 const router = Router()
@@ -11,6 +18,7 @@ router.post('/:hotelId', verifyAdmin, createRoom)
 //UPDATE
 //http://localhost:8001/api/rooms/id
 router.patch('/:id', verifyAdmin, updateRoom)
+router.patch('/availability/:id', updateRoomAvailability)
 
 //UPDATE
 //http://localhost:8001/api/rooms/id
