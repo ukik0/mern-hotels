@@ -6,18 +6,22 @@ import {faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot} fro
 import {Footer} from "../../Components/Footer/Footer";
 import {EmailList} from "../../Components/EmailList/EmailList";
 import {useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useFetch from "../../Hooks/useFetching";
 import {useSelector} from "react-redux";
+import {Reserve} from "../../Components/Reserve/Reserve";
 
 
 export function HotelOrevwiew() {
     const {id} = useParams()
+    const navigate = useNavigate()
+    const {user} = useSelector((state) => state?.auth)
     const dates = useSelector((state) => state?.info?.search?.date[0])
-    const {options} = useSelector((state) => state.info.search)
+    const options = useSelector((state) => state?.info?.search?.options)
 
     const [slideNumber, setSlideNumber] = useState(0);
     const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
     const {data, loading} = useFetch(`/hotels/hotel/${id}`)
 
@@ -40,11 +44,19 @@ export function HotelOrevwiew() {
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
-        const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());
         const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
-        return diffDays;
+        return diffDays || 1;
     }
 
+
+    function handleClick() {
+        if (user) {
+            setOpenModal(true)
+        } else  {
+            navigate('/login')
+        }
+    }
 
     return (<>
         <Navbar/>
@@ -74,7 +86,7 @@ export function HotelOrevwiew() {
                         />
                     </div>)}
                     <div className={cl.hotel__wrapper}>
-                        <button className={cl.btn}>Reserve or Book Now!</button>
+                        <button className={cl.btn} onClick={handleClick}>Reserve or Book Now!</button>
                         <h1 className={cl.hotel__title}>{data.title}</h1>
                         <div className={cl.hotel__adress}>
                             <FontAwesomeIcon icon={faLocationDot}/>
@@ -102,13 +114,13 @@ export function HotelOrevwiew() {
                             </div>
 
                             <div className={cl.hotel__details__price}>
-                                <h1>Perfect for a {dayDifference(dates.endDate, dates.startDate)}-night stay!</h1>
+                                <h1>Perfect for a {dayDifference(dates?.endDate, dates?.startDate)}-night stay!</h1>
                                 <span>
                                 Located in the real heart of Krakow, this property has an
                                 excellent location score of 9.8!
                             </span>
                                 <h2>
-                                    <b>{dayDifference(dates.endDate, dates.startDate) * data.cheapestPrice * options.room}$</b> ({dayDifference(dates.endDate, dates.startDate)} nights)
+                                    <b>{dayDifference(dates?.endDate, dates?.startDate) * data.cheapestPrice * options?.room}$</b> ({dayDifference(dates.endDate, dates.startDate)} nights)
                                 </h2>
                                 <button>Reserve or Book Now!</button>
                             </div>
@@ -119,5 +131,6 @@ export function HotelOrevwiew() {
                 </>
             }
         </div>
+        {openModal && <Reserve setOpen={setOpenModal} hotelId = {id}/>}
     </>)
 }

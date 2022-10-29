@@ -1,9 +1,10 @@
 import cl from './Navbar.module.scss'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../Redux/Slices/authSlice";
 
 export function Navbar() {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const {user} = useSelector((state) => state.auth)
 
@@ -18,10 +19,10 @@ export function Navbar() {
                 <Link to={'/'} className={cl.logo}>Hotels</Link>
 
                 {!user ? <div className={cl.nav__items}>
-                    <button className={cl.nav__items__button}>
+                    <button onClick={() => navigate('/register')} className={cl.nav__items__button}>
                         register
                     </button>
-                    <button className={cl.nav__items__button}>
+                    <button onClick={() => navigate('/login')} className={cl.nav__items__button}>
                         login
                     </button>
                 </div> : <>

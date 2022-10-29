@@ -18,7 +18,11 @@ export function HotelPage() {
     const [openDate, setOpenDate] = useState(false);
     const [MinMax, setMinMax] = useState({min: 0, max: 9999});
 
-    const {data, loading, reFetch} = useFetch(`/hotels/?city=${destionation}&min=${MinMax.min}&max=${MinMax.max}`)
+    const {
+        data,
+        loading,
+        reFetch
+    } = useFetch(`/hotels/${destionation ? `?city=${destionation}&min=${MinMax.min}&max=${MinMax.max}` : ''}`)
 
 
     function handleClick() {
@@ -29,24 +33,28 @@ export function HotelPage() {
             <Navbar/>
             <Header/>
             <div className={cl.list__container}>
+
                 <div className={cl.list__wrapper}>
                     <div className={cl.list__search}>
+
                         <h1 className={cl.list__search__title}>
                             Search
                         </h1>
 
                         <div className={cl.list__search__item}>
                             <label>Destination</label>
-                            <input  placeholder={destionation} type="text"/>
+                            <input value={destionation} onChange={(e) => setDestionation(e.target.value)} type="text"/>
                         </div>
 
                         <div className={cl.list__search__item}>
                             <label>Check-in-Date</label>
                             <span
                                 onClick={() => setOpenDate(!openDate)}>{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
-                            {openDate && <DateRange onChange={item => setDate([item.selection])} minDate={new Date()}
+                            {openDate && <DateRange className={cl.list__search__item__date}
+                                                    onChange={item => setDate([item.selection])} minDate={new Date()}
                                                     ranges={date}/>}
                         </div>
+
 
                         <label htmlFor="">Options</label>
 
@@ -86,7 +94,8 @@ export function HotelPage() {
 
                     </div>
                     <div className={cl.list__result}>
-                        {loading ? <h1>Loading</h1> : data.map((item, idx) => (<SearchItem key={item._id} item={item}/>))}
+                        {loading ? <h1>Loading</h1> : data.map((item, idx) => (
+                            <SearchItem key={item._id} item={item}/>))}
                     </div>
                 </div>
             </div>

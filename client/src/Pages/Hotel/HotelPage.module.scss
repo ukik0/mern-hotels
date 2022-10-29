@@ -35,6 +35,11 @@
     flex-direction: column;
     gap: 5px;
     margin-bottom: 10px;
+    position: relative;
+
+    &__date{
+      z-index: 5;
+    }
 
 
     &__options{
